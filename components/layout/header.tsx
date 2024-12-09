@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MobileNav } from "./mobile-nav";
 import { useAuth } from "@/lib/auth";
+import Image from "next/image";
 
 export function Header() {
   const { user, logout } = useAuth();
@@ -72,7 +73,7 @@ export function Header() {
                 size="icon"
                 className="rounded-full"
               >
-                <img
+                <Image
                   src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face"
                   alt="Profile"
                   className="rounded-full"
@@ -84,7 +85,9 @@ export function Header() {
             <DropdownMenuContent align="end">
               <div className="flex items-center gap-2 p-2">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{user?.name}</p>
+                  <p className="text-sm font-medium leading-none">
+                    {user ? `${user.firstName} ${user.lastName}` : ''}
+                  </p>
                   <p className="text-xs leading-none text-muted-foreground">
                     {user?.email}
                   </p>

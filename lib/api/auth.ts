@@ -26,7 +26,7 @@ export const authApi = {
     try {
       const response = await axios.post(`${API_URL}/auth/login`, credentials);
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(error.response?.data?.message || 'Login failed');
     }
   },
@@ -35,7 +35,7 @@ export const authApi = {
     try {
       const response = await axios.post(`${API_URL}/auth/forgot-password`, { email });
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(error.response?.data?.message || 'Failed to send reset email');
     }
   },
@@ -47,7 +47,7 @@ export const authApi = {
         password,
       });
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(error.response?.data?.message || 'Password reset failed');
     }
   },
