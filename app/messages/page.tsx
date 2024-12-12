@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { MessageList } from "@/components/messages/message-list";
@@ -8,7 +8,7 @@ import { MessageInput } from "@/components/messages/message-input";
 import { UserList } from "@/components/messages/user-list";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { messageApi, Message } from "@/lib/api/messages";
+import { messageApi } from "@/lib/api/messages";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
@@ -30,13 +30,13 @@ const mockUsers = [
 ];
 
 export default function MessagesPage() {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [selectedUser, setSelectedUser] = useState<string | null>(null);
+  const [messages, setMessages] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { toast } = useToast();
 
-  const fetchMessages = useCallback(async () => {
+  const fetchMessages = async () => {
     if (!selectedUser) return;
     
     try {
@@ -51,11 +51,11 @@ export default function MessagesPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [selectedUser, toast]);
+  };
 
   useEffect(() => {
     fetchMessages();
-  }, [fetchMessages]);
+  }, [selectedUser]);
 
   const handleUserSelect = (userId: string) => {
     setSelectedUser(userId);
@@ -81,7 +81,7 @@ export default function MessagesPage() {
                 <div className="h-full py-4">
                   <UserList
                     users={mockUsers}
-                    selectedUserId={selectedUser ?? undefined}
+                    selectedUserId={selectedUser}
                     onUserSelect={handleUserSelect}
                   />
                 </div>
@@ -97,7 +97,7 @@ export default function MessagesPage() {
             <div className="hidden md:block w-1/3 lg:w-1/4 border-r">
               <UserList
                 users={mockUsers}
-                selectedUserId={selectedUser ?? undefined}
+                selectedUserId={selectedUser}
                 onUserSelect={setSelectedUser}
               />
             </div>
@@ -123,7 +123,7 @@ export default function MessagesPage() {
             <div className="hidden md:block w-1/3 lg:w-1/4 border-r">
               <UserList
                 users={mockUsers}
-                selectedUserId={selectedUser ?? undefined}
+                selectedUserId={selectedUser}
                 onUserSelect={setSelectedUser}
               />
             </div>

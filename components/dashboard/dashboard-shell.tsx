@@ -13,13 +13,13 @@ export function DashboardShell({
   ...props
 }: DashboardShellProps) {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="relative min-h-screen flex flex-col">
       <Header />
-      <div className="flex flex-1">
+      <div className="flex-1 flex">
         <DashboardNav />
-        <main className="flex-1">
-          <div className="container mx-auto p-8">
-            <div className={cn("mx-auto max-w-7xl", className)} {...props}>
+        <main className="flex-1 bg-muted/30">
+          <div className="container mx-auto p-6 lg:p-8">
+            <div className={cn("mx-auto max-w-7xl space-y-6", className)} {...props}>
               {children}
             </div>
           </div>

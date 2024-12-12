@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/lib/auth/store";
+import { ROLES } from "@/lib/auth/routes";
 import { 
   School, 
   Users, 
@@ -11,46 +13,79 @@ import {
   Calendar, 
   MessageSquare,
   Settings,
-  GraduationCap
+  GraduationCap,
+  ClipboardCheck,
+  BookMarked,
+  UserCog,
+  BarChart
 } from "lucide-react";
 
-const navItems = [
-  {
-    title: "Dashboard",
-    href: "/",
-    icon: School,
-  },
-  {
-    title: "Students",
-    href: "/students",
-    icon: Users,
-  },
-  {
-    title: "Teachers",
-    href: "/teachers",
-    icon: GraduationCap,
-  },
-  {
-    title: "Courses",
-    href: "/courses",
-    icon: BookOpen,
-  },
-  {
-    title: "Schedule",
-    href: "/schedule",
-    icon: Calendar,
-  },
-  {
-    title: "Messages",
-    href: "/messages",
-    icon: MessageSquare,
-  },
-  {
-    title: "Settings",
-    href: "/settings",
-    icon: Settings,
-  },
-];
+const getNavItems = (role: string) => {
+  const items = [
+    {
+      title: "Dashboard",
+      href: `/${role}/dashboard`,
+      icon: BarChart,
+      roles: [ROLES.ADMIN, ROLES.TEACHER, ROLES.STUDENT],
+    },
+    {
+      title: "Students",
+      href: "/students",
+      icon: Users,
+      roles: [ROLES.ADMIN, ROLES.TEACHER],
+    },
+    {
+      title: "Teachers",
+      href: "/teachers",
+      icon: GraduationCap,
+      roles: [ROLES.ADMIN],
+    },
+    {
+      title: "Courses",
+      href: "/courses",
+      icon: BookOpen,
+      roles: [ROLES.ADMIN, ROLES.TEACHER, ROLES.STUDENT],
+    },
+    {
+      title: "Attendance",
+      href: "/attendance",
+      icon: ClipboardCheck,
+      roles: [ROLES.ADMIN, ROLES.TEACHER],
+    },
+    {
+      title: "Assignments",
+      href: "/assignments",
+      icon: BookMarked,
+      roles: [ROLES.TEACHER, ROLES.STUDENT],
+    },
+    {
+      title: "Schedule",
+      href: "/schedule",
+      icon: Calendar,
+      roles: [ROLES.ADMIN, ROLES.TEACHER, ROLES.STUDENT],
+    },
+    {
+      title: "Messages",
+      href: "/messages",
+      icon: MessageSquare,
+      roles: [ROLES.ADMIN, ROLES.TEACHER, ROLES.STUDENT],
+    },
+    {
+      title: "Profile",
+      href: "/profile",
+      icon: UserCog,
+      roles: [ROLES.ADMIN, ROLES.TEACHER, ROLES.STUDENT],
+    },
+    {
+      title: "Settings",
+      href: "/settings",
+      icon: Settings,
+      roles: [ROLES.ADMIN],
+    },
+  ];
+
+  return items.filter(item => item.roles.includes(role));
+};
 
 interface DashboardNavProps {
   isMobile?: boolean;
@@ -59,6 +94,8 @@ interface DashboardNavProps {
 
 export function DashboardNav({ isMobile, onNavClick }: DashboardNavProps) {
   const pathname = usePathname();
+  const { user } = useAuth();
+  const navItems = getNavItems(user?.role || 'student');
 
   return (
     <nav className={cn(

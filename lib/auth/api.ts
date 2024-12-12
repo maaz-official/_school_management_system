@@ -1,25 +1,7 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
+import { LoginCredentials, AuthResponse, ResetPasswordResponse } from './types';
 
 const API_URL = 'http://localhost:5000/api/auth';
-
-export interface LoginCredentials {
-  email: string;
-  password: string;
-}
-
-export interface User {
-  id: string;
-  email: string;
-  role: string;
-  firstName: string;
-  lastName: string;
-}
-
-export interface AuthResponse {
-  success: boolean;
-  user: User;
-}
 
 export const authApi = {
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
@@ -31,7 +13,7 @@ export const authApi = {
     }
   },
 
-  async forgotPassword(email: string): Promise<{ success: boolean; message: string }> {
+  async forgotPassword(email: string): Promise<ResetPasswordResponse> {
     try {
       const response = await axios.post(`${API_URL}/forgot-password`, { email });
       return response.data;
@@ -40,9 +22,9 @@ export const authApi = {
     }
   },
 
-  async resetPassword(token: string, password: string): Promise<{ success: boolean; message: string }> {
+  async resetPassword(token: string, password: string): Promise<ResetPasswordResponse> {
     try {
-      const response = await axios.post(`${API_URL}/auth/reset-password`, {
+      const response = await axios.post(`${API_URL}/reset-password`, {
         token,
         password,
       });
@@ -53,7 +35,10 @@ export const authApi = {
   },
 
   async logout(): Promise<void> {
-    Cookies.remove('token');
-    window.location.href = '/login';
+    try {
+      await axios.post(`${API_URL}/logout`);
+    } catch (error: any) {
+      console.error('Logout error:', error);
+    }
   },
 };

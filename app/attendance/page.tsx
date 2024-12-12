@@ -1,4 +1,4 @@
-"use client";  // This marks the component as a Client Component
+"use client";
 
 import { useEffect, useState } from "react";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
@@ -6,10 +6,10 @@ import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { AttendanceTable } from "@/components/attendance/attendance-table";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { studentApi, Student } from "@/lib/api/students";
+import { studentApi } from "@/lib/api/students";
 
 export default function AttendancePage() {
-  const [students, setStudents] = useState<Student[]>([]);  // Specify the type here
+  const [students, setStudents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
